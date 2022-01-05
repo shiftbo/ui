@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原生轮播图</title>
+    <!-- 参考文档 https://juejin.cn/post/6995039882888347679 -->
+    <style>
+        .swiper-container {
+            width: 500px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .swiper-view {
+            width: 1500px;
+            display: flex;
+            transform: translateX(-1000px);
+        }
+
+        .swiper-item {
+            width: 500px;
+            height: 300px;
+            display: flex;
+            font-size: 100px;
+            justify-content: center;
+            align-items: center;
+            color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="swiper-container">
+        <div class="swiper-view">
+            <div class="swiper-item" style="background-color: red;">1</div>
+            <div class="swiper-item" style="background-color: blue;">2</div>
+            <div class="swiper-item" style="background-color: black;">3</div>
+        </div>
+    </div>
+    <script>
+        let swiperContainer = document.querySelector('.swiper-container')
+        let swiperView = document.querySelector('.swiper-view')
+        let swiperItems = swiperView.querySelectorAll('.swiper-item')
+        let mousedown = false
+        let start = 0
+        let moveDistance = 0
+        let moveX = 0
+        let lastMove = 0
+        let isMoved = false
+        swiperView.addEventListener('mousedown', (e) => {
+            console.log(1)
+            mousedown = true
+            start = e.pageX
+            lastMove = moveX
+        })
+        swiperView.addEventListener('mousemove', (e) => {
+            if (mousedown) {
+                moveDistance = e.pageX - start
+                moveX = isMoved ? (lastMove + moveDistance) : moveDistance
+                swiperView.style = `transform:translateX(${moveX}px)`
+                isMoved = true
+            }
+
+        })
+        swiperView.addEventListener('mouseup', (e) => {
+            mousedown = false
+        })
+    </script>
+</body>
+
+</html>
