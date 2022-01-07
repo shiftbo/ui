@@ -15,9 +15,7 @@
         }
 
         .swiper-view {
-            width: 1500px;
             display: flex;
-            transform: translateX(-1000px);
         }
 
         .swiper-item {
@@ -38,18 +36,30 @@
             <div class="swiper-item" style="background-color: red;">1</div>
             <div class="swiper-item" style="background-color: blue;">2</div>
             <div class="swiper-item" style="background-color: black;">3</div>
+            <div class="swiper-item" style="background-color: yellow;">4</div>
+            <div class="swiper-item" style="background-color: pink;">5</div>
         </div>
     </div>
     <script>
         let swiperContainer = document.querySelector('.swiper-container')
         let swiperView = document.querySelector('.swiper-view')
         let swiperItems = swiperView.querySelectorAll('.swiper-item')
+        //宽度
+        let swiperContainerWidth = swiperContainer.offsetWidth
+        let swiperCount = swiperItems.length
+        let swiperWidth = `width:${swiperCount*swiperContainerWidth}px;`
+        swiperView.style = swiperWidth
+        let leftBorder = 0
+        let rightBorder = -(swiperContainerWidth) * (swiperCount-1)
+        
+        console.log(rightBorder)
         let mousedown = false
         let start = 0
         let moveDistance = 0
         let moveX = 0
         let lastMove = 0
         let isMoved = false
+        let currentItem = 0
         swiperView.addEventListener('mousedown', (e) => {
             console.log(1)
             mousedown = true
@@ -60,12 +70,31 @@
             if (mousedown) {
                 moveDistance = e.pageX - start
                 moveX = isMoved ? (lastMove + moveDistance) : moveDistance
-                swiperView.style = `transform:translateX(${moveX}px)`
+                swiperView.style = `${swiperWidth}transform:translateX(${moveX}px)`
                 isMoved = true
             }
 
         })
         swiperView.addEventListener('mouseup', (e) => {
+           
+            if(moveDistance<0){
+                if(moveDistance<-100){
+                    currentItem+=1
+                }
+                moveX = -500*currentItem
+            }else{
+                if(moveDistance>100){
+                    currentItem-=1
+                }
+                moveX = -500*currentItem
+            }
+            if(moveX>leftBorder){
+                moveX=leftBorder    
+            }else if(moveX<rightBorder){
+                moveX=rightBorder
+            }
+            swiperView.style = `${swiperWidth}transform:translateX(${moveX}px);transition: transform 600ms`
+            moveDistance = 0;
             mousedown = false
         })
     </script>
